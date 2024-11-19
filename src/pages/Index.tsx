@@ -1,6 +1,5 @@
 import { PlantCard } from "@/components/PlantCard";
 import { WateringControl } from "@/components/WateringControl";
-import { EnvironmentImages } from "@/components/EnvironmentImages";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { BarChart3, Bell } from "lucide-react";
@@ -15,8 +14,6 @@ const Index = () => {
           <h1 className="text-4xl font-bold text-plant-dark mb-2">Plant Dashboard</h1>
           <p className="text-gray-600">Monitor and control your plant's environment</p>
         </header>
-
-        <EnvironmentImages />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <PlantCard
