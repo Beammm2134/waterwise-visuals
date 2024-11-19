@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Thermometer, Droplets, Sprout, Sun } from "lucide-react";
 
 interface PlantCardProps {
   name: string;
@@ -44,19 +45,31 @@ export const PlantCard = ({
       
       <div className="grid grid-cols-2 gap-4 mt-4">
         <div className="space-y-1">
-          <p className="text-sm text-gray-500">Moisture</p>
+          <p className="text-sm text-gray-500 flex items-center gap-2">
+            <Sprout className="w-4 h-4" />
+            Moisture
+          </p>
           <p className="text-lg font-medium">{moisture}%</p>
         </div>
         <div className="space-y-1">
-          <p className="text-sm text-gray-500">Temperature</p>
+          <p className="text-sm text-gray-500 flex items-center gap-2">
+            <Thermometer className="w-4 h-4" />
+            Temperature
+          </p>
           <p className="text-lg font-medium">{temperature}°C</p>
         </div>
         <div className="space-y-1">
-          <p className="text-sm text-gray-500">Humidity</p>
+          <p className="text-sm text-gray-500 flex items-center gap-2">
+            <Droplets className="w-4 h-4" />
+            Humidity
+          </p>
           <p className="text-lg font-medium">{humidity}%</p>
         </div>
         <div className="space-y-1">
-          <p className="text-sm text-gray-500">Brightness</p>
+          <p className="text-sm text-gray-500 flex items-center gap-2">
+            <Sun className="w-4 h-4" />
+            Brightness
+          </p>
           <p className="text-lg font-medium">{brightness}%</p>
         </div>
       </div>
