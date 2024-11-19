@@ -2,7 +2,7 @@ import { PlantCard } from "@/components/PlantCard";
 import { WateringControl } from "@/components/WateringControl";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { BarChart3 } from "lucide-react";
+import { BarChart3, Bell } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -26,13 +26,21 @@ const Index = () => {
           <WateringControl />
         </div>
 
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center gap-4 mt-8">
           <Button 
             onClick={() => navigate('/graphs')}
             className="flex items-center gap-2"
           >
             <BarChart3 className="w-4 h-4" />
             View Detailed Graphs
+          </Button>
+          <Button 
+            onClick={() => navigate('/notifications')}
+            className="flex items-center gap-2"
+            variant="outline"
+          >
+            <Bell className="w-4 h-4" />
+            View Notifications
           </Button>
         </div>
       </div>
