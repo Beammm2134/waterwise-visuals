@@ -1,18 +1,12 @@
 import { PlantCard } from "@/components/PlantCard";
-import { EnvironmentChart } from "@/components/EnvironmentChart";
 import { WateringControl } from "@/components/WateringControl";
-
-const mockData = [
-  { time: "00:00", temperature: 22, moisture: 65 },
-  { time: "04:00", temperature: 21, moisture: 63 },
-  { time: "08:00", temperature: 23, moisture: 60 },
-  { time: "12:00", temperature: 25, moisture: 58 },
-  { time: "16:00", temperature: 24, moisture: 55 },
-  { time: "20:00", temperature: 22, moisture: 52 },
-  { time: "24:00", temperature: 21, moisture: 50 },
-];
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { BarChart3 } from "lucide-react";
 
 const Index = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -32,11 +26,14 @@ const Index = () => {
           <WateringControl />
         </div>
 
-        <div className="mt-8">
-          <EnvironmentChart
-            data={mockData}
-            title="Temperature & Moisture Trends"
-          />
+        <div className="flex justify-center mt-8">
+          <Button 
+            onClick={() => navigate('/graphs')}
+            className="flex items-center gap-2"
+          >
+            <BarChart3 className="w-4 h-4" />
+            View Detailed Graphs
+          </Button>
         </div>
       </div>
     </div>
