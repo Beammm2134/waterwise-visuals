@@ -24,7 +24,7 @@ export const WateringControl = () => {
           alt="Current Plant"
           className="w-full h-48 object-cover rounded-lg mb-4"
         />
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
           <div className="space-y-1">
             <h3 className="text-lg font-semibold">Automatic Watering</h3>
             <p className="text-sm text-gray-500">
@@ -36,7 +36,7 @@ export const WateringControl = () => {
             onCheckedChange={handleToggle}
             className="data-[state=checked]:bg-plant-primary"
           />
-        </div>
+        </div> */}
       </div>
     </Card>
   );
