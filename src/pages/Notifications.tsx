@@ -1,6 +1,8 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
-import { Bell, Droplet, Activity } from "lucide-react";
+import { Bell, Droplet, Activity, Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 // Mock notifications data
 const notifications = [
@@ -65,13 +67,25 @@ const NotificationItem = ({ notification }: { notification: typeof notifications
 };
 
 const Notifications = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-3xl mx-auto space-y-6">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-plant-dark mb-2">Notifications</h1>
-          <p className="text-gray-600">Recent alerts and activity</p>
-        </header>
+        <div className="flex justify-between items-center mb-8">
+          <header className="text-center">
+            <h1 className="text-4xl font-bold text-plant-dark mb-2">Notifications</h1>
+            <p className="text-gray-600">Recent alerts and activity</p>
+          </header>
+          <Button 
+            onClick={() => navigate('/')}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <Home className="w-4 h-4" />
+            Back to Home
+          </Button>
+        </div>
 
         <ScrollArea className="h-[600px] rounded-md border p-4">
           {notifications.map((notification) => (
