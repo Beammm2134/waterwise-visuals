@@ -6,6 +6,8 @@ interface PlantCardProps {
   status: "Healthy" | "Needs Water" | "Critical";
   moisture: number;
   temperature: number;
+  humidity: number;
+  brightness: number;
   lastWatered: string;
 }
 
@@ -14,6 +16,8 @@ export const PlantCard = ({
   status,
   moisture,
   temperature,
+  humidity,
+  brightness,
   lastWatered,
 }: PlantCardProps) => {
   const getStatusColor = (status: string) => {
@@ -46,6 +50,14 @@ export const PlantCard = ({
         <div className="space-y-1">
           <p className="text-sm text-gray-500">Temperature</p>
           <p className="text-lg font-medium">{temperature}°C</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-sm text-gray-500">Humidity</p>
+          <p className="text-lg font-medium">{humidity}%</p>
+        </div>
+        <div className="space-y-1">
+          <p className="text-sm text-gray-500">Brightness</p>
+          <p className="text-lg font-medium">{brightness}%</p>
         </div>
       </div>
       
