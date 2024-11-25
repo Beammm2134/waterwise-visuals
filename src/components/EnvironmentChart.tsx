@@ -3,16 +3,16 @@ import { Card } from "@/components/ui/card";
 
 interface DataPoint {
   time: string;
-  temperature: number;
-  moisture: number;
+  value: number;
 }
 
 interface EnvironmentChartProps {
   data: DataPoint[];
   title: string;
+  yAxisLabel?: string;
 }
 
-export const EnvironmentChart = ({ data, title }: EnvironmentChartProps) => {
+export const EnvironmentChart = ({ data, title, yAxisLabel }: EnvironmentChartProps) => {
   return (
     <Card className="p-6 animate-fade-in">
       <h3 className="text-lg font-semibold mb-4">{title}</h3>
@@ -31,7 +31,7 @@ export const EnvironmentChart = ({ data, title }: EnvironmentChartProps) => {
               fontSize={12}
               tickLine={false}
               axisLine={false}
-              tickFormatter={(value) => `${value}°`}
+              tickFormatter={(value) => `${value}`}
             />
             <Tooltip
               contentStyle={{
@@ -42,16 +42,8 @@ export const EnvironmentChart = ({ data, title }: EnvironmentChartProps) => {
             />
             <Line
               type="monotone"
-              dataKey="temperature"
-              stroke="#34D399"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4 }}
-            />
-            <Line
-              type="monotone"
-              dataKey="moisture"
-              stroke="#10B981"
+              dataKey="value"
+              stroke="#34D399" // Default color (you can change based on data type)
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 4 }}
