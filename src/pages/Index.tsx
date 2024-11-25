@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PlantCard } from "@/components/PlantCard";
-import { WateringControl } from "@/components/WateringControl";
+import WateringControl from "@/components/WateringControl";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { BarChart3, Bell } from "lucide-react";

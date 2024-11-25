@@ -1,43 +1,29 @@
-import { useState } from "react";
-import { Switch } from "@/components/ui/switch";
-import { Card } from "@/components/ui/card";
-import { toast } from "@/components/ui/use-toast";
+import React, { useEffect, useState } from "react";
 
-export const WateringControl = () => {
-  const [isAutomatic, setIsAutomatic] = useState(false);
+const WateringControl = () => {
+  const [imageSrc, setImageSrc] = useState("http://192.168.43.18/custom");
 
-  const handleToggle = (enabled: boolean) => {
-    setIsAutomatic(enabled);
-    toast({
-      title: enabled ? "Automatic watering enabled" : "Automatic watering disabled",
-      description: enabled
-        ? "Your plant will be watered automatically based on soil moisture levels."
-        : "You'll need to water your plant manually.",
-    });
-  };
+  useEffect(() => {
+    const updateImage = () => {
+      const timestamp = new Date().getTime(); // Add a timestamp to avoid caching
+      setImageSrc(`http://192.168.43.18/custom?timestamp=${timestamp}`);
+    };
+
+    updateImage(); // Update immediately on mount
+
+    const interval = setInterval(() => {
+      updateImage(); // Update every second
+    }, 500);
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, []);
 
   return (
-    <Card className="p-6 animate-fade-in">
-      <div className="space-y-6">
-        <img
-          src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8"
-          alt="Current Plant"
-          className="w-full h-48 object-cover rounded-lg mb-4"
-        />
-        {/* <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h3 className="text-lg font-semibold">Automatic Watering</h3>
-            <p className="text-sm text-gray-500">
-              Let the system handle watering automatically
-            </p>
-          </div>
-          <Switch
-            checked={isAutomatic}
-            onCheckedChange={handleToggle}
-            className="data-[state=checked]:bg-plant-primary"
-          />
-        </div> */}
-      </div>
-    </Card>
+    <div>
+      <img src={imageSrc} alt="Custom" />
+      {/* Other components or elements */}
+    </div>
   );
 };
+
+export default WateringControl;
