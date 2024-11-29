@@ -4,43 +4,8 @@ import WateringControl from "@/components/WateringControl";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { BarChart3, Bell } from "lucide-react";
+import { getRecentPlantData } from "@/services/PlantService";
 
-const fetchPlantData = async () => {
-  const databaseUrl =
-    "https://embedded-sys-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
-
-  try {
-    const response = await fetch(databaseUrl);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-
-    // Function to get the most recent data from a sensor (e.g., ldr, soil, temperature, etc.)
-    const getMostRecentData = (sensorData: any) => {
-      const timestamps = Object.keys(sensorData); // Get all timestamps (keys)
-      const mostRecentTimestamp = timestamps.at(-1); // Get the last timestamp (most recent)
-      return sensorData[mostRecentTimestamp]; // Return the value for that timestamp
-    };
-
-    // Get the most recent values for each sensor
-    const moistureData = getMostRecentData(data.soil || {});
-    const temperatureData = getMostRecentData(data.temp || {});
-    const humidityData = temperatureData?.humidity; // Assuming humidity is under the temp node
-    const brightnessData = getMostRecentData(data.ldr || {});
-
-    // Return the most recent values for all sensors
-    return {
-      moisture: moistureData?.soil_moisture || 50, // Default moisture value if not found
-      temperature: temperatureData?.temperature || 0, // Default temperature if not found
-      humidity: humidityData || 0, // Default humidity if not found
-      brightness: brightnessData?.ldr_value || 0, // Default brightness if not found
-    };
-  } catch (error) {
-    console.error("Failed to fetch data:", error);
-    return null;
-  }
-};
 
 
 
@@ -73,7 +38,7 @@ const Index = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await fetchPlantData();
+      const data = await getRecentPlantData();
       if (data) {
         const status = determineStatus(data.moisture, data.temperature, data.humidity);
         setPlantData({ ...data, status });
