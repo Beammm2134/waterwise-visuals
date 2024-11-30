@@ -7,11 +7,13 @@ import { getRecentPlantData } from "@/services/PlantService";
 import { Notification } from "@/interface/Notification";
 import { PlantData } from "@/interface/PlantData";
 import { NotificationItem } from "@/components/NotificationItem";
+import { v4 as uuidv4 } from 'uuid';
 
 const Notifications = () => {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [lastNotificationState, setLastNotificationState] = useState<Record<string, number | string | boolean>>({});
+  const [lastNotificationState, setLastNotificationState] = useState<Record<string, boolean>>({});
+  const [seenNotificationIds, setSeenNotificationIds] = useState<Set<string>>(new Set());
 
   // Define notification logic
   const evaluateNotifications = (plant: PlantData): Notification[] => {
@@ -28,20 +30,27 @@ const Notifications = () => {
 
     Object.keys(notificationTypes).forEach((type) => {
       if (notificationTypes[type] && lastNotificationState[type] !== true) {
-        newNotifications.push({
-          id: Date.now(),
+        const notification: Notification = {
+          id: uuidv4(), // Unique ID
           title: type.replace(/([A-Z])/g, ' $1').trim(), // Convert camelCase to human-readable title
           message: generateNotificationMessage(type, plant),
           timestamp: plantTimestamp,
           type: type,
-        });
+        };
+
+        // Add the notification only if it hasn't been seen before
+        if (!seenNotificationIds.has(notification.id)) {
+          newNotifications.push(notification);
+          setSeenNotificationIds((prev) => new Set(prev).add(notification.id));
+        }
+
         // Mark this notification type as "seen"
         setLastNotificationState((prevState) => ({
           ...prevState,
           [type]: true,
         }));
       } else if (!notificationTypes[type]) {
-        // Reset the state when the condition is no longer met
+        // Reset state for types no longer meeting the condition
         setLastNotificationState((prevState) => ({
           ...prevState,
           [type]: false,
@@ -85,7 +94,7 @@ const Notifications = () => {
     fetchAndUpdate(); // Fetch immediately on mount
 
     return () => clearInterval(interval); // Cleanup interval on unmount
-  }, [lastNotificationState]);
+  }, [lastNotificationState, seenNotificationIds]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">

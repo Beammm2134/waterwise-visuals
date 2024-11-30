@@ -7,15 +7,28 @@ import { getAllPlantData } from "@/services/PlantService";
 
 const Graphs = () => {
   const navigate = useNavigate();
-  const [plantData, setPlantData] = useState([]);
+  const [ldrData, setLdrData] = useState({});
+  const [motionData, setMotionData] = useState({});
+  const [soilData, setSoilData] = useState({});
+  const [tempData, setTempData] = useState({});
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getAllPlantData();
-      setPlantData(data);
+      const { ldrData, motionData, soilData, tempData } = await getAllPlantData();
+      setLdrData(ldrData);
+      setMotionData(motionData);
+      setSoilData(soilData);
+      setTempData(tempData);
     };
     getData();
   }, []);
+
+  const formatData = (data: Record<string, any>) => {
+    return Object.keys(data).map((key) => ({
+      time: key,
+      value: data[key],
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -40,9 +53,9 @@ const Graphs = () => {
         <div className="grid gap-6">
           {/* Graph for Moisture */}
           <EnvironmentChart
-            data={plantData.map((d) => ({
+            data={formatData(soilData).map((d) => ({
               time: d.time,
-              value: d.moisture,
+              value: d.value.soil_moisture, // Adjust according to the structure of soilData
             }))}
             title="Moisture Trends"
             yAxisLabel="Moisture (%)"
@@ -50,9 +63,9 @@ const Graphs = () => {
 
           {/* Graph for Temperature */}
           <EnvironmentChart
-            data={plantData.map((d) => ({
+            data={formatData(tempData).map((d) => ({
               time: d.time,
-              value: d.temperature,
+              value: d.value.temperature, // Adjust according to the structure of tempData
             }))}
             title="Temperature Trends"
             yAxisLabel="Temperature (°C)"
@@ -60,9 +73,9 @@ const Graphs = () => {
 
           {/* Graph for Humidity */}
           <EnvironmentChart
-            data={plantData.map((d) => ({
+            data={formatData(tempData).map((d) => ({
               time: d.time,
-              value: d.humidity,
+              value: d.value.humidity, // Adjust according to the structure of tempData
             }))}
             title="Humidity Trends"
             yAxisLabel="Humidity (%)"
@@ -70,9 +83,9 @@ const Graphs = () => {
 
           {/* Graph for Brightness */}
           <EnvironmentChart
-            data={plantData.map((d) => ({
+            data={formatData(ldrData).map((d) => ({
               time: d.time,
-              value: d.brightness,
+              value: d.value.ldr_value, // Adjust according to the structure of ldrData
             }))}
             title="Brightness Trends"
             yAxisLabel="Brightness (LDR)"

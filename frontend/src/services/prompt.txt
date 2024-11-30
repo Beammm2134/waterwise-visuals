@@ -1,0 +1,25 @@
+let's break down my api
+{
+  "ldr": {
+    "1732143178": {
+      "ldr_value": 84
+    },
+  },
+  "motion": {
+    "1732144457": {
+      "motion": "detected"
+    },
+  },
+  "soil": {
+    "1732143188": {
+      "raw_value": 3891,
+      "soil_moisture": 7
+    },
+  },
+  "temp": {
+    "1732143178": {
+      "humidity": 35.7,
+      "temperature": 27.8
+    },
+  },
+}
