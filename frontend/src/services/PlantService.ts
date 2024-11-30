@@ -1,4 +1,4 @@
-const backendBaseUrl = "http://localhost:3000/api/plants";
+const backendBaseUrl = "https://lovable.dev/api/plants";
 
 export const getAllPlantData = async () => {
   try {
