@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const plantRoutes = require("./routes/plantRoutes");
+const notificationRoutes = require('./routes/notificationRoutes');
 const cors = require("cors");
 
 // Load environment variables from .env file
@@ -12,12 +13,6 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
-app.use(cors(
-{
-    origin: process.env.HOST || 'https://lovable.dev/projects/b7674f45-d296-4037-b195-c51d01b405cb',
-    credentials: true
-}));
-    
 
 // Routes
 app.use("/api/plants", plantRoutes);
@@ -26,6 +21,8 @@ app.use("/api/plants", plantRoutes);
 app.get("/", (req, res) => {
     res.send("Backend is running and ready to handle requests!");
 });
+
+app.use('/api', notificationRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

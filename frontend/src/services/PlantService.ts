@@ -1,4 +1,4 @@
-const backendBaseUrl = "https://lovable.dev/projects/b7674f45-d296-4037-b195-c51d01b405cb/api/plants";
+const backendBaseUrl = "https://water-visuals-backend.vercel.app/api/plants";
 
 export const getAllPlantData = async () => {
   try {
