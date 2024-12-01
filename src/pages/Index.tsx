@@ -3,7 +3,7 @@ import { PlantCard } from "@/components/PlantCard";
 import WateringControl from "@/components/WateringControl";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, Bell, Brain } from "lucide-react";
+import { BarChart3, Brain } from "lucide-react";
 import { getRecentPlantData, analyzeImage } from "@/services/PlantService";
 import { useToast } from "@/hooks/use-toast";
 
@@ -126,12 +126,13 @@ const Index = () => {
             View Detailed Graphs
           </Button>
           <Button
-            onClick={() => navigate('/notifications')}
+            onClick={handleAnalyze}
             className="flex items-center gap-2"
             variant="outline"
+            disabled={analyzing}
           >
-            <Bell className="w-4 h-4" />
-            View Notifications
+            <Brain className="w-4 h-4" />
+            Analyze Plant Health
           </Button>
         </div>
       </div>
