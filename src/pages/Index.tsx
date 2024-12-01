@@ -3,47 +3,9 @@ import { PlantCard } from "@/components/PlantCard";
 import WateringControl from "@/components/WateringControl";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, Bell } from "lucide-react";
-
-const fetchPlantData = async () => {
-  const databaseUrl =
-    "https://embedded-sys-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
-
-  try {
-    const response = await fetch(databaseUrl);
-    if (!response.ok) {
-      throw new Error(`HTTP error!. status: ${response.status}`);
-    }
-    const data = await response.json();
-
-    // Function to get the most recent data from a sensor (e.g., ldr, soil, temperature, etc.)
-    const getMostRecentData = (sensorData: any) => {
-      const timestamps = Object.keys(sensorData); // Get all timestamps (keys)
-      const mostRecentTimestamp = timestamps.at(-1); // Get the last timestamp (most recent)
-      return sensorData[mostRecentTimestamp]; // Return the value for that timestamp
-    };
-
-    // Get the most recent values for each sensor
-    const moistureData = getMostRecentData(data.soil || {});
-    const temperatureData = getMostRecentData(data.temp || {});
-    const humidityData = temperatureData?.humidity; // Assuming humidity is under the temp node
-    const brightnessData = getMostRecentData(data.ldr || {});
-
-    // Return the most recent values for all sensors
-    return {
-      moisture: moistureData?.soil_moisture || 50, // Default moisture value if not found
-      temperature: temperatureData?.temperature || 0, // Default temperature if not found
-      humidity: humidityData || 0, // Default humidity if not found
-      brightness: brightnessData?.ldr_value || 0, // Default brightness if not found
-    };
-  } catch (error) {
-    console.error("Failed to fetch data:", error);
-    return null;
-  }
-};
-
-
-
+import { BarChart3, Bell, Brain } from "lucide-react";
+import { getRecentPlantData, analyzeImage } from "@/services/PlantService";
+import { useToast } from "@/hooks/use-toast";
 
 const determineStatus = (moisture: number, temperature: number, humidity: number) => {
   if (moisture > 40 && humidity >= 30) {
@@ -57,6 +19,7 @@ const determineStatus = (moisture: number, temperature: number, humidity: number
 
 const Index = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [plantData, setPlantData] = useState<{
     moisture: number;
     temperature: number;
@@ -70,10 +33,12 @@ const Index = () => {
     brightness: 0,
     status: "Critical",
   });
+  const [analyzing, setAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<string | null>(null);
 
   useEffect(() => {
     const getData = async () => {
-      const data = await fetchPlantData();
+      const data = await getRecentPlantData();
       if (data) {
         const status = determineStatus(data.moisture, data.temperature, data.humidity);
         setPlantData({ ...data, status });
@@ -88,6 +53,29 @@ const Index = () => {
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
+
+  const handleAnalyze = async () => {
+    setAnalyzing(true);
+    setAnalysisResult(null);
+    try {
+      const result = await analyzeImage();
+      if (result) {
+        setAnalysisResult(result.health);
+        toast({
+          title: "Plant Analysis Complete",
+          description: "Analysis results are shown below the button",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Analysis Failed",
+        description: "Could not analyze plant image",
+        variant: "destructive",
+      });
+    } finally {
+      setAnalyzing(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -107,7 +95,26 @@ const Index = () => {
             brightness={plantData.brightness}
             lastWatered="Today at 8:00 AM"
           />
-          <WateringControl />
+          <div className="space-y-4">
+            <div className="bg-white p-4 rounded-lg shadow-sm">
+              <Button
+                onClick={handleAnalyze}
+                className="w-full flex items-center justify-center gap-2"
+                disabled={analyzing}
+              >
+                <Brain className="w-4 h-4" />
+                {analyzing ? "Analyzing..." : "Analyze Plant Health"}
+              </Button>
+              {analysisResult && (
+                <div className="mt-4 p-4 bg-gray-50 rounded-md">
+                  <p className="text-center text-gray-700">
+                    Plant Health Analysis: <span className="font-semibold">{analysisResult}</span>
+                  </p>
+                </div>
+              )}
+            </div>
+            <WateringControl />
+          </div>
         </div>
 
         <div className="flex justify-center gap-4 mt-8">
